@@ -1,6 +1,8 @@
 'use client';
 
 import { SignInButton, SignedIn, SignedOut, UserButton, useUser } from '@clerk/nextjs';
+import { useQuery } from 'convex/react';
+import { api } from '../convex/_generated/api';
 import { useState } from 'react';
 import { 
   LayoutDashboard, Users, CreditCard, DollarSign, 
@@ -16,17 +18,11 @@ export default function DashboardPage() {
   const [currentPage, setCurrentPage] = useState('overview');
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
-  // TODO: Uncomment when Convex codegen is complete
-  // const users = useQuery(api.users.list);
-  // const subscriptions = useQuery(api.subscriptions.list);
-  // const transactions = useQuery(api.transactions.list);
-  // const tickets = useQuery(api.tickets.list);
-  // const metrics = useQuery(api.metrics.list);
-  
-  const users: any[] = [];
-  const subscriptions: any[] = [];
-  const transactions: any[] = [];
-  const tickets: any[] = [];
+  const users = useQuery(api.users.list) || [];
+  const subscriptions = useQuery(api.subscriptions.list) || [];
+  const transactions = useQuery(api.transactions.list) || [];
+  const tickets = useQuery(api.tickets.list) || [];
+  const metrics = useQuery(api.metrics.list) || [];
 
   const navigationItems = [
     { id: 'overview', label: 'Overview', icon: LayoutDashboard },
