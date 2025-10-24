@@ -19,7 +19,7 @@ export default function UsersTable() {
 
   const products = ['AUTOCREA', 'EDUGENIUS', 'MEDIX AI', 'ECOTRACK AI', 'HIREWISE', 'FINWISDOM', 'MINDFUL AI'];
 
-  const filteredUsers = users.filter(user => {
+  const filteredUsers = users.filter((user: any) => {
     const matchesSearch = 
       user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.email.toLowerCase().includes(searchTerm.toLowerCase());
@@ -36,11 +36,11 @@ export default function UsersTable() {
 
   const exportToCSV = () => {
     const headers = ['Nombre', 'Email', 'Producto', 'Plan', 'Estado', 'Fecha Registro'];
-    const rows = filteredUsers.map(u => [
+    const rows = filteredUsers.map((u: any) => [
       u.name, u.email, u.productId, u.subscriptionPlan, u.status, 
       format(u._creationTime, 'dd/MM/yyyy')
     ]);
-    const csv = [headers, ...rows].map(row => row.join(',')).join('\n');
+    const csv = [headers, ...rows].map((row: any) => row.join(',')).join('\n');
     const blob = new Blob([csv], { type: 'text/csv' });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -112,7 +112,7 @@ export default function UsersTable() {
           className="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500"
         >
           <option value="all">Todos los productos</option>
-          {products.map(p => <option key={p} value={p}>{p}</option>)}
+          {products.map((p: string) => <option key={p} value={p}>{p}</option>)}
         </select>
       </div>
 
@@ -125,19 +125,19 @@ export default function UsersTable() {
         <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
           <p className="text-gray-400 text-sm">Activos</p>
           <p className="text-2xl font-bold text-green-400 mt-1">
-            {users.filter(u => u.status === 'active').length}
+            {users.filter((u: any) => u.status === 'active').length}
           </p>
         </div>
         <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
           <p className="text-gray-400 text-sm">Premium</p>
           <p className="text-2xl font-bold text-purple-400 mt-1">
-            {users.filter(u => u.subscriptionPlan === 'premium').length}
+            {users.filter((u: any) => u.subscriptionPlan === 'premium').length}
           </p>
         </div>
         <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
           <p className="text-gray-400 text-sm">Nuevos (7d)</p>
           <p className="text-2xl font-bold text-blue-400 mt-1">
-            {users.filter(u => Date.now() - u._creationTime < 7 * 24 * 60 * 60 * 1000).length}
+            {users.filter((u: any) => Date.now() - u._creationTime < 7 * 24 * 60 * 60 * 1000).length}
           </p>
         </div>
       </div>
@@ -176,7 +176,7 @@ export default function UsersTable() {
                   </td>
                 </tr>
               ) : (
-                filteredUsers.map((user) => (
+                filteredUsers.map((user: any) => (
                   <tr key={user._id} className="hover:bg-gray-750 transition-colors">
                     <td className="px-6 py-4">
                       <div>

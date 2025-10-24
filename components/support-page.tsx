@@ -14,7 +14,7 @@ export default function SupportPage() {
   const [priorityFilter, setPriorityFilter] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState('');
 
-  const filteredTickets = tickets.filter(ticket => {
+  const filteredTickets = tickets.filter((ticket: any) => {
     const matchesStatus = statusFilter === 'all' || ticket.status === statusFilter;
     const matchesPriority = priorityFilter === 'all' || ticket.priority === priorityFilter;
     const matchesSearch = 
@@ -25,9 +25,9 @@ export default function SupportPage() {
 
   const stats = {
     total: tickets.length,
-    open: tickets.filter(t => t.status === 'open').length,
-    inProgress: tickets.filter(t => t.status === 'in_progress').length,
-    resolved: tickets.filter(t => t.status === 'resolved').length,
+    open: tickets.filter((t: any) => t.status === 'open').length,
+    inProgress: tickets.filter((t: any) => t.status === 'in_progress').length,
+    resolved: tickets.filter((t: any) => t.status === 'resolved').length,
     avgResponseTime: '2.5h',
   };
 
@@ -133,7 +133,7 @@ export default function SupportPage() {
             <p className="text-gray-400">No hay tickets que coincidan con los filtros</p>
           </div>
         ) : (
-          filteredTickets.map((ticket) => (
+          filteredTickets.map((ticket: any) => (
             <div key={ticket._id} className="bg-gray-800 border border-gray-700 rounded-lg p-6 hover:border-gray-600 transition-colors">
               <div className="flex items-start justify-between">
                 <div className="flex-1">

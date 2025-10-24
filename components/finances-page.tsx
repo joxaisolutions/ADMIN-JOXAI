@@ -10,43 +10,43 @@ export default function FinancesPage() {
   const transactions = useQuery(api.transactions.list) || [];
   
   const totalRevenue = transactions
-    .filter(t => t.type === 'subscription' || t.type === 'token_purchase')
-    .reduce((sum, t) => sum + t.amount, 0);
+    .filter((t: any) => t.type === 'subscription' || t.type === 'token_purchase')
+    .reduce((sum: number, t: any) => sum + t.amount, 0);
   
   const monthlyRevenue = transactions
-    .filter(t => {
+    .filter((t: any) => {
       const date = new Date(t._creationTime);
       const now = new Date();
       return date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear();
     })
-    .reduce((sum, t) => sum + t.amount, 0);
+    .reduce((sum: number, t: any) => sum + t.amount, 0);
 
-  const refunds = transactions.filter(t => t.type === 'refund').reduce((sum, t) => sum + t.amount, 0);
-  const pendingPayments = transactions.filter(t => t.status === 'pending').reduce((sum, t) => sum + t.amount, 0);
+  const refunds = transactions.filter((t: any) => t.type === 'refund').reduce((sum: number, t: any) => sum + t.amount, 0);
+  const pendingPayments = transactions.filter((t: any) => t.status === 'pending').reduce((sum: number, t: any) => sum + t.amount, 0);
 
   // Chart data
-  const last30Days = Array.from({ length: 30 }, (_, i) => {
+  const last30Days = Array.from({ length: 30 }, (_: any, i: number) => {
     const date = new Date();
     date.setDate(date.getDate() - (29 - i));
-    const dayTransactions = transactions.filter(t => {
+    const dayTransactions = transactions.filter((t: any) => {
       const tDate = new Date(t._creationTime);
       return tDate.toDateString() === date.toDateString();
     });
     return {
       date: format(date, 'dd/MM'),
-      revenue: dayTransactions.reduce((sum, t) => sum + (t.type !== 'refund' ? t.amount : 0), 0),
-      refunds: Math.abs(dayTransactions.reduce((sum, t) => sum + (t.type === 'refund' ? t.amount : 0), 0))
+      revenue: dayTransactions.reduce((sum: number, t: any) => sum + (t.type !== 'refund' ? t.amount : 0), 0),
+      refunds: Math.abs(dayTransactions.reduce((sum: number, t: any) => sum + (t.type === 'refund' ? t.amount : 0), 0))
     };
   });
 
   const revenueByProduct = Object.entries(
-    transactions.reduce((acc, t) => {
+    transactions.reduce((acc: any, t: any) => {
       if (t.type !== 'refund') {
         acc[t.productId] = (acc[t.productId] || 0) + t.amount;
       }
       return acc;
     }, {} as Record<string, number>)
-  ).map(([name, value]) => ({ name, value }));
+  ).map(([name, value]: [string, any]) => ({ name, value }));
 
   const COLORS = ['#4A90E2', '#9B59B6', '#00D9FF', '#3498DB', '#E74C3C', '#F39C12', '#2ECC71'];
 
@@ -157,12 +157,12 @@ export default function FinancesPage() {
                 cx="50%"
                 cy="50%"
                 labelLine={false}
-                label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                label={({ name, percent }: any) => `${name} ${(percent * 100).toFixed(0)}%`}
                 outerRadius={100}
                 fill="#8884d8"
                 dataKey="value"
               >
-                {revenueByProduct.map((entry, index) => (
+                {revenueByProduct.map((entry: any, index: number) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>
@@ -192,7 +192,7 @@ export default function FinancesPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-700">
-              {transactions.slice(0, 10).map((tx) => (
+              {transactions.slice(0, 10).map((tx: any) => (
                 <tr key={tx._id} className="hover:bg-gray-750 transition-colors">
                   <td className="px-6 py-4 font-mono text-sm text-gray-400">{tx._id.slice(-8)}</td>
                   <td className="px-6 py-4">{tx.userId}</td>

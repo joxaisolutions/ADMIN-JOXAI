@@ -1,19 +1,28 @@
 # 🚀 Guía de Despliegue en Netlify - Dashboard JoxAI
 
-## Configuración Completa para Netlify
+## ✅ Tu Aplicación Está Lista para Desplegar
 
-### 📋 Paso 1: Configuración en Netlify Dashboard
+Todos los archivos de configuración están listos. Solo sigue los pasos a continuación.
 
-#### A. Build Settings (Site settings → Build & deploy → Build settings)
+---
 
-Copia estos valores **exactamente** como se muestran:
+## 📋 Paso 1: Configuración en Netlify Dashboard
+
+### A. Build Settings (Site settings → Build & deploy → Build settings)
+
+**Copia estos valores EXACTAMENTE:**
 
 ```
-Base directory:         (dejar vacío)
+Base directory:         (DEJAR VACÍO - no escribas nada)
 Build command:          npm run build
 Publish directory:      .next
-Functions directory:    netlify/functions
+Functions directory:    (DEJAR VACÍO - ya está en netlify.toml)
 ```
+
+**⚠️ IMPORTANTE:** 
+- NO pongas "out" en Publish directory
+- NO agregues redirects manuales
+- Publish directory debe ser `.next` (con el punto)
 
 #### B. Variables de Entorno (Site settings → Environment variables)
 

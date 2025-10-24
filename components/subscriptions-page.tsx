@@ -10,19 +10,19 @@ export default function SubscriptionsPage() {
   const subscriptions = useQuery(api.subscriptions.list) || [];
   const [activeTab, setActiveTab] = useState<'all' | 'active' | 'cancelled' | 'trial'>('all');
 
-  const filteredSubscriptions = subscriptions.filter(sub => {
+  const filteredSubscriptions = subscriptions.filter((sub: any) => {
     if (activeTab === 'all') return true;
     return sub.status === activeTab;
   });
 
   const stats = {
     total: subscriptions.length,
-    active: subscriptions.filter(s => s.status === 'active').length,
-    trial: subscriptions.filter(s => s.status === 'trial').length,
-    cancelled: subscriptions.filter(s => s.status === 'cancelled').length,
+    active: subscriptions.filter((s: any) => s.status === 'active').length,
+    trial: subscriptions.filter((s: any) => s.status === 'trial').length,
+    cancelled: subscriptions.filter((s: any) => s.status === 'cancelled').length,
     mrr: subscriptions
-      .filter(s => s.status === 'active')
-      .reduce((sum, s) => {
+      .filter((s: any) => s.status === 'active')
+      .reduce((sum: number, s: any) => {
         const prices: Record<string, number> = { free: 0, basic: 9, pro: 29, premium: 99 };
         return sum + (prices[s.plan] || 0);
       }, 0)
@@ -103,7 +103,7 @@ export default function SubscriptionsPage() {
 
       {/* Tabs */}
       <div className="flex gap-2 border-b border-gray-700">
-        {tabs.map(tab => (
+        {tabs.map((tab: any) => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id as any)}
@@ -146,7 +146,7 @@ export default function SubscriptionsPage() {
                   </td>
                 </tr>
               ) : (
-                filteredSubscriptions.map((sub) => (
+                filteredSubscriptions.map((sub: any) => (
                   <tr key={sub._id} className="hover:bg-gray-750 transition-colors">
                     <td className="px-6 py-4 font-medium">{sub.userId}</td>
                     <td className="px-6 py-4 text-blue-400">{sub.productId}</td>

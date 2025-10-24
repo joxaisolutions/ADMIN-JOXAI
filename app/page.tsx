@@ -26,7 +26,7 @@ export default function DashboardPage() {
   const subscriptions = useQuery(api.subscriptions.list) || [];
   const transactions = useQuery(api.transactions.list) || [];
   const tickets = useQuery(api.tickets.list) || [];
-  const metrics = useQuery(api.metrics.list) || [];
+  // const metrics = useQuery(api.metrics.list) || []; // Uncomment after running: npx convex dev
 
   const navigationItems = [
     { id: 'overview', label: 'Overview', icon: LayoutDashboard },
@@ -43,10 +43,10 @@ export default function DashboardPage() {
 
   // Calculate metrics
   const totalUsers = users?.length || 0;
-  const activeSubscriptions = subscriptions?.filter(s => s.status === 'active').length || 0;
-  const totalMRR = subscriptions?.filter(s => s.status === 'active')
-    .reduce((sum, s) => sum + s.price, 0) || 0;
-  const openTickets = tickets?.filter(t => t.status === 'open').length || 0;
+  const activeSubscriptions = subscriptions?.filter((s: any) => s.status === 'active').length || 0;
+  const totalMRR = subscriptions?.filter((s: any) => s.status === 'active')
+    .reduce((sum: number, s: any) => sum + s.price, 0) || 0;
+  const openTickets = tickets?.filter((t: any) => t.status === 'open').length || 0;
 
   return (
     <div className="min-h-screen">
@@ -238,7 +238,7 @@ export default function DashboardPage() {
                       <CardContent>
                         {transactions && transactions.length > 0 ? (
                           <div className="space-y-4">
-                            {transactions.slice(0, 5).map((transaction, idx) => (
+                            {transactions.slice(0, 5).map((transaction: any, idx: number) => (
                               <div key={idx} className="flex items-start gap-4">
                                 <div className={`w-2 h-2 mt-2 rounded-full ${
                                   transaction.status === 'success' ? 'bg-success' :
@@ -272,7 +272,7 @@ export default function DashboardPage() {
                       <CardContent>
                         {tickets && tickets.length > 0 ? (
                           <div className="space-y-4">
-                            {tickets.filter(t => t.status === 'open').slice(0, 5).map((ticket, idx) => (
+                            {tickets.filter((t: any) => t.status === 'open').slice(0, 5).map((ticket: any, idx: number) => (
                               <div key={idx} className="flex items-start gap-4">
                                 <div className={`w-2 h-2 mt-2 rounded-full ${
                                   ticket.priority === 'high' ? 'bg-destructive' :
