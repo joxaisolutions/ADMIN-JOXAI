@@ -1,0 +1,582 @@
+# PROMPT PARA CREAR DASHBOARD COMPLETO DE GESTIÓN DEL ECOSISTEMA JOXAI
+
+## CONTEXTO DEL PROYECTO
+
+Crea un dashboard administrativo interno 100% funcional para gestionar todo el ecosistema JoxAI, una empresa de soluciones de IA que incluye 7 productos: AUTOCREA (generación de código), EDUGENIUS (educación), MEDIX AI (salud), ECOTRACK AI (sostenibilidad), HIREWISE (RRHH), FINWISDOM (finanzas), y MINDFUL AI (bienestar mental).
+
+## REQUERIMIENTOS TÉCNICOS
+
+**Stack Obligatorio:**
+- Next.js 14+ con App Router y TypeScript
+- React 18+ con Server Components donde sea posible
+- TailwindCSS para estilos
+- shadcn/ui para componentes (Alert, Card, Button, Dialog, Table, Tabs, etc.)
+- Lucide React para iconos
+- Recharts para gráficos y visualizaciones
+- React Hook Form + Zod para formularios con validación
+
+**Almacenamiento de Datos:**
+- Usar `window.storage` API para persistencia de datos (NO localStorage ni sessionStorage)
+- Estructura de datos jerárquica con keys descriptivas
+- Manejo de errores en todas las operaciones de storage
+
+**Autenticación:**
+- Sistema de login simulado (hardcoded: admin@joxai.org / password: Admin2025!)
+- Protección de rutas
+- Logout funcional
+
+## ESTRUCTURA DEL DASHBOARD
+
+### 1. LAYOUT PRINCIPAL
+
+**Sidebar Izquierdo (Navegación):**
+```
+[Logo JoxAI]
+━━━━━━━━━━━━━━━
+📊 Overview
+👥 Usuarios
+💳 Suscripciones
+💰 Finanzas
+🎫 Tokens & Uso
+📦 Bundles
+🎫 Soporte
+📈 Analytics
+🤖 Productos
+⚙️ Configuración
+━━━━━━━━━━━━━━━
+[Usuario Avatar]
+[Cerrar Sesión]
+```
+
+**Header Superior:**
+- Breadcrumbs de navegación
+- Buscador global
+- Notificaciones (badge con número)
+- Selector de rango de fechas
+- Avatar de usuario admin
+
+**Main Content Area:**
+- Responsive y con scroll
+- Padding apropiado
+- Background con gradiente sutil
+
+### 2. PÁGINAS Y FUNCIONALIDADES
+
+#### 📊 OVERVIEW (Página Principal)
+
+**Métricas Cards (Top Row):**
+```
+┌─────────────┬─────────────┬─────────────┬─────────────┐
+│ 💰 MRR      │ 👥 Usuarios │ 💳 Suscr.   │ 📉 Churn    │
+│ $487,250    │ 125,340     │ 12,534      │ 4.1%        │
+│ +18% ↑     │ +22% ↑     │ +15% ↑     │ -0.3% ↓    │
+└─────────────┴─────────────┴─────────────┴─────────────┘
+```
+
+**Gráficos:**
+- Line Chart: MRR últimos 12 meses (con comparativa año anterior)
+- Bar Chart: Ingresos por producto
+- Area Chart: Crecimiento de usuarios
+- Pie Chart: Distribución de planes
+
+**Actividad Reciente:**
+- Lista en tiempo real de últimas acciones:
+  - Nueva suscripción
+  - Cancelación
+  - Ticket de soporte abierto
+  - Pago fallido
+  - Límite de tokens alcanzado
+
+**Alertas Críticas:**
+- Alertas con colores (rojo: crítico, amarillo: advertencia, azul: info)
+- Ejemplos:
+  - "Alto consumo de tokens detectado en user_789"
+  - "15 pagos fallarán mañana (tarjetas vencidas)"
+  - "Churn subió 1.2% este mes"
+
+#### 👥 USUARIOS
+
+**Funcionalidades:**
+- **Tabla de usuarios** con:
+  - Columnas: ID, Email, Nombre, Plan, Tokens (usado/total), Estado, Fecha Registro, Acciones
+  - Búsqueda por email/nombre/ID
+  - Filtros: Por plan, por estado (activo/inactivo/suspendido), por producto
+  - Ordenamiento por cualquier columna
+  - Paginación (50 usuarios por página)
+
+- **Acciones por Usuario:**
+  - Ver detalles completos (modal o página dedicada)
+  - Editar información
+  - Suspender/reactivar cuenta
+  - Resetear contraseña
+  - Otorgar tokens manuales
+  - Ver historial de actividad
+  - Enviar email
+
+- **Modal de Detalles de Usuario:**
+  ```
+  ┌────────────────────────────────────────────┐
+  │ Usuario: Juan Pérez (juan@email.com)      │
+  ├────────────────────────────────────────────┤
+  │ Info General:                              │
+  │ - ID: user_abc123                          │
+  │ - Registro: 15 Marzo 2026                  │
+  │ - Último login: Hace 2 horas               │
+  │                                            │
+  │ Suscripciones Activas:                     │
+  │ - AUTOCREA Pro ($79/mes) - Renueva 5 Nov   │
+  │ - EDUGENIUS Plus ($9/mes) - Renueva 12 Nov │
+  │                                            │
+  │ Uso de Tokens (Octubre):                   │
+  │ - AUTOCREA: 15,234 / 30,000 (51%)         │
+  │ - EDUGENIUS: 2,890 / 5,000 (58%)          │
+  │                                            │
+  │ Historial de Pagos:                        │
+  │ - 22 Oct 2026: $88.00 (Éxito)            │
+  │ - 22 Sep 2026: $88.00 (Éxito)            │
+  │                                            │
+  │ Tickets de Soporte:                        │
+  │ - #234: "Error al generar app" - Cerrado  │
+  │                                            │
+  │ [Editar] [Suspender] [Otorgar Tokens]    │
+  └────────────────────────────────────────────┘
+  ```
+
+- **Botón "Agregar Usuario Manual"** (para Enterprise)
+
+- **Estadísticas de Usuarios:**
+  - Total usuarios
+  - Usuarios activos (login últimos 30 días)
+  - Tasa de activación (registrados vs que completaron onboarding)
+  - Distribución geográfica (mapa o lista)
+
+#### 💳 SUSCRIPCIONES
+
+**Tabs:**
+- Activas
+- Canceladas
+- Vencidas
+- Prueba Gratuita
+
+**Tabla de Suscripciones:**
+- Columnas: Usuario, Producto, Plan, Precio, Estado, Próxima Renovación, Acciones
+- Filtros: Por producto, por plan, por estado
+- Búsqueda por usuario
+
+**Métricas de Suscripciones:**
+```
+┌──────────────────────────────────────────────────┐
+│ MRR: $487,250    ARR: $5,847,000                │
+│ Suscripciones Activas: 12,534                    │
+│ Churn Rate: 4.1%                                 │
+│ ARPU (Average Revenue Per User): $38.87          │
+│                                                  │
+│ Distribución por Plan:                           │
+│ ███████████████ Free (5,234 usuarios)            │
+│ ████████ Creator/Plus (4,123 - 33%)              │
+│ ██████ Pro (2,567 - 20%)                         │
+│ ██ Business (543 - 4%)                           │
+│ █ Enterprise (67 - 1%)                           │
+└──────────────────────────────────────────────────┘
+```
+
+**Gráfico: MRR Growth** (últimos 12 meses con proyección)
+
+**Próximas Renovaciones:**
+- Tabla de próximas 100 renovaciones en 7 días
+- Alertas de tarjetas vencidas o pagos que podrían fallar
+
+**Acciones:**
+- Cancelar suscripción manualmente
+- Cambiar plan
+- Aplicar descuento o extensión
+- Ver facturas generadas
+
+#### 💰 FINANZAS
+
+**Tabs:**
+- Overview
+- Transacciones
+- Facturas
+- Reportes
+
+**Overview Tab:**
+- **Ingresos Totales:** Hoy, Esta Semana, Este Mes, Este Año
+- **Gráfico de Ingresos:** Daily revenue últimos 30 días
+- **Ingresos por Producto:** Bar chart comparativo
+- **Métodos de Pago:** Pie chart (Tarjeta, PayPal, Transferencia, etc.)
+- **Ingresos por País:** Top 10 países
+
+**Transacciones Tab:**
+- Tabla de todas las transacciones
+- Columnas: ID, Usuario, Producto, Monto, Método, Estado, Fecha
+- Filtros: Por estado (éxito/fallido/pendiente), por producto, por rango de fechas
+- Búsqueda por ID transacción o usuario
+
+**Facturas Tab:**
+- Lista de facturas generadas
+- Opciones: Descargar PDF, reenviar por email, marcar como pagada manualmente
+
+**Reportes Tab:**
+- Botones para generar reportes:
+  - "Reporte Mensual de Ingresos" (PDF)
+  - "Reporte de Impuestos" (CSV)
+  - "Análisis P&L" (Excel)
+- Exportar datos a CSV/Excel
+
+**Métricas Financieras:**
+```
+┌────────────────────────────────────────┐
+│ Ingresos Este Mes: $487,250            │
+│ Costos Infraestructura: $72,000 (15%) │
+│ Profit Margin: $415,250 (85%)         │
+│                                        │
+│ Runway: 24 meses                       │
+│ Burn Rate: -$15,000/mes               │
+│ Cash Balance: $850,000                 │
+└────────────────────────────────────────┘
+```
+
+#### 🎫 TOKENS & USO
+
+**Métricas Globales:**
+```
+┌───────────────────────────────────────────────┐
+│ Total Tokens Procesados (Octubre):            │
+│ 45,234,890 tokens                             │
+│                                               │
+│ Costo de Infraestructura: $2,160             │
+│ Costo por Token: $0.0000477                  │
+│                                               │
+│ Tokens por Producto:                          │
+│ ████████████ AUTOCREA: 25M (55%)              │
+│ ██████ EDUGENIUS: 12M (27%)                   │
+│ ███ MEDIX AI: 6M (13%)                        │
+│ █ Otros: 2.2M (5%)                            │
+└───────────────────────────────────────────────┘
+```
+
+**Gráfico: Consumo de Tokens Diario** (últimos 30 días, por producto)
+
+**Top Usuarios por Consumo:**
+- Tabla: Usuario, Producto, Tokens Consumidos, % del Límite, Acciones
+- Alertas de usuarios cerca del límite (>90%)
+
+**Detección de Anomalías:**
+- Lista de usuarios con patrones inusuales:
+  - Consumo 10x mayor al promedio
+  - Picos súbitos de uso
+  - Sugerencia de contactar para upsell o investigar abuso
+
+**Configuración de Límites:**
+- Tabla editable con límites por plan
+- Ejemplo: Free = 500 tokens/mes, Creator = 10,000, etc.
+
+#### 📦 BUNDLES
+
+**Bundles Activos:**
+- Tabla de usuarios con bundles
+- Columnas: Usuario, Productos en Bundle, Precio, Descuento Aplicado, Estado
+
+**Estadísticas:**
+```
+Total Bundles Activos: 1,234
+Revenue de Bundles: $52,340/mes
+Descuento Promedio: 23%
+
+Combinaciones Más Populares:
+1. AUTOCREA + EDUGENIUS + FINWISDOM (345 usuarios)
+2. EDUGENIUS + MEDIX + MINDFUL (234 usuarios)
+3. AUTOCREA + HIREWISE + FINWISDOM (189 usuarios)
+```
+
+**Análisis de Bundles:**
+- Comparativa: Revenue bundles vs productos individuales
+- Conversion rate: % de usuarios que upgradean a bundle
+- Sugerencias de bundles populares para pre-configurar
+
+**Acciones:**
+- Crear bundle promocional temporal
+- Modificar descuentos de bundles existentes
+
+#### 🎫 SOPORTE
+
+**Tabs:**
+- Tickets Abiertos
+- Tickets Cerrados
+- Todos
+
+**Tabla de Tickets:**
+- Columnas: #ID, Usuario, Asunto, Producto, Prioridad, Estado, Fecha, Asignado A, Acciones
+- Filtros: Por prioridad (Alta/Media/Baja), por estado, por producto
+- Búsqueda por ID o usuario
+
+**Vista de Ticket (Modal o Página):**
+```
+┌─────────────────────────────────────────────┐
+│ Ticket #567: "Error al generar aplicación" │
+├─────────────────────────────────────────────┤
+│ Usuario: juan@email.com                     │
+│ Producto: AUTOCREA                          │
+│ Prioridad: Alta 🔴                          │
+│ Estado: Abierto                             │
+│ Creado: 22 Oct 2026, 3:45 PM               │
+│                                             │
+│ Historial de Conversación:                  │
+│ ───────────────────────────────────────────│
+│ [Juan] Hola, al intentar generar una app   │
+│ web con Next.js me da error "timeout"...   │
+│                                             │
+│ [Admin] Hola Juan, revisamos el error...   │
+│                                             │
+│ ───────────────────────────────────────────│
+│ Responder:                                  │
+│ [___________________________________]       │
+│ [Adjuntar Archivo] [Cambiar Estado]        │
+│ [Enviar]                                    │
+└─────────────────────────────────────────────┘
+```
+
+**Métricas de Soporte:**
+```
+Tickets Abiertos: 23
+Tiempo Promedio de Respuesta: 2.3 horas
+Tiempo Promedio de Resolución: 8.5 horas
+Satisfacción (CSAT): 4.6/5.0 ⭐
+```
+
+**Crear Nuevo Ticket Manual**
+
+#### 📈 ANALYTICS
+
+**Tabs:**
+- Producto (métricas por cada IA)
+- Growth (funnels, conversión)
+- Retención (cohorts, churn)
+- Engagement (uso, features populares)
+
+**Producto Tab:**
+- Selector de producto (AUTOCREA, EDUGENIUS, etc.)
+- Métricas específicas:
+  - **AUTOCREA:** Apps generadas, promedio de tokens/app, success rate
+  - **EDUGENIUS:** Sesiones de tutoría, tiempo promedio, mejora reportada
+  - **MEDIX:** Consultas, tipos de síntomas más comunes
+  - etc.
+
+**Growth Tab:**
+- **Funnel de Conversión:**
+  ```
+  Visitantes Web → Registros → Activación → Primer Pago → Retención
+     100%            40%          75%          15%          85%
+  ```
+- Gráficos de cada etapa
+- Identificación de cuellos de botella
+
+**Retención Tab:**
+- **Cohort Analysis:** Tabla de retención por mes de registro
+- **Churn Analysis:** Razones de cancelación (encuesta post-cancelación)
+- **Reactivación:** Usuarios que cancelaron y volvieron
+
+**Engagement Tab:**
+- DAU/WAU/MAU (Daily/Weekly/Monthly Active Users)
+- Features más usadas
+- Tiempo promedio en plataforma
+- Stickiness ratio (DAU/MAU)
+
+#### 🤖 PRODUCTOS
+
+**Lista de Productos del Ecosistema:**
+
+Cada producto tiene su card:
+```
+┌──────────────────────────────────────────┐
+│ [Logo] AUTOCREA                          │
+├──────────────────────────────────────────┤
+│ Estado: 🟢 Activo                        │
+│ Usuarios: 45,234                         │
+│ MRR: $195,000                            │
+│ Tokens/mes: 25M                          │
+│                                          │
+│ [Ver Detalles] [Configuración]          │
+└──────────────────────────────────────────┘
+```
+
+**Detalles de Producto:**
+- Métricas específicas
+- Configuración de planes y precios
+- Features habilitadas/deshabilitadas
+- Integrations activas
+- Changelog / Updates recientes
+
+**Agregar Nuevo Producto** (para futuro)
+
+#### ⚙️ CONFIGURACIÓN
+
+**Tabs:**
+- General
+- Equipo
+- Integraciones
+- Seguridad
+- Notificaciones
+
+**General Tab:**
+- Nombre de la empresa
+- Logo (upload)
+- Información de contacto
+- Timezone
+- Moneda por defecto
+
+**Equipo Tab:**
+- Lista de miembros del equipo admin
+- Roles: Admin, Support, Developer, Viewer
+- Invitar nuevo miembro
+- Permisos por rol
+
+**Integraciones Tab:**
+- Estado de integraciones:
+  - ✅ Stripe (Conectado)
+  - ✅ Clerk (Conectado)
+  - ✅ Convex (Conectado)
+  - ⚠️ Slack (No configurado)
+  - ⚠️ Zendesk (No configurado)
+- Botones para conectar/desconectar
+
+**Seguridad Tab:**
+- Logs de actividad de admins
+- Configuración de MFA
+- IP whitelist
+- API keys (generar, revocar)
+
+**Notificaciones Tab:**
+- Configurar cuándo recibir alertas por email:
+  - Nueva suscripción
+  - Pago fallido
+  - Ticket de soporte crítico
+  - Límite de tokens alcanzado
+  - etc.
+
+### 3. CARACTERÍSTICAS TÉCNICAS CRÍTICAS
+
+**Datos de Ejemplo (Seed Data):**
+Genera datos realistas y variados:
+- 200+ usuarios con diferentes planes y estados
+- 500+ transacciones (éxito, fallidas, pendientes)
+- 50+ tickets de soporte en diferentes estados
+- Métricas históricas (últimos 12 meses de MRR, usuarios, tokens)
+- Distribución geográfica (10 países Latam + USA + España)
+
+**Interactividad:**
+- Todos los botones deben ser funcionales
+- Los formularios deben validar con Zod
+- Las tablas deben permitir ordenamiento real
+- Los filtros deben funcionar en tiempo real
+- Los gráficos deben ser interactivos (hover, tooltips)
+
+**Persistencia con window.storage:**
+```typescript
+// Estructura de keys sugerida:
+users:list -> Array de usuarios
+users:{userId} -> Datos de usuario individual
+subscriptions:list -> Array de suscripciones
+transactions:list -> Array de transacciones
+tickets:list -> Array de tickets
+metrics:mrr -> Histórico de MRR
+metrics:users -> Histórico de usuarios
+config:general -> Configuración general
+// etc.
+```
+
+**Manejo de Errores:**
+- Try-catch en todas las operaciones de storage
+- Toasts/alerts para feedback al usuario
+- Fallbacks cuando no hay datos
+
+**Performance:**
+- Lazy loading de componentes pesados
+- Paginación en tablas grandes
+- Debounce en búsquedas
+- Memoización de cálculos costosos
+
+**Responsive Design:**
+- Desktop first pero funcional en tablet
+- Sidebar colapsable en móvil
+- Tablas con scroll horizontal en pantallas pequeñas
+
+### 4. ESTILO VISUAL
+
+**Paleta de Colores JoxAI:**
+```css
+--primary: #4A90E2 (Azul eléctrico)
+--secondary: #9B59B6 (Púrpura)
+--accent: #00D9FF (Cian)
+--background: #0A0E27 (Negro profundo)
+--foreground: #FFFFFF
+--muted: #6B7280
+--success: #10B981
+--warning: #F59E0B
+--error: #EF4444
+```
+
+**Tema:**
+- Dark mode por defecto
+- Glassmorphism en cards importantes
+- Gradientes sutiles en backgrounds
+- Sombras suaves
+- Bordes redondeados (rounded-lg)
+- Animaciones de transición fluidas
+
+**Tipografía:**
+- Font: Inter o sistema sans-serif
+- Títulos: font-bold
+- Números grandes: text-3xl o text-4xl
+- Métricas: tabular-nums
+
+### 5. COMPONENTES REUTILIZABLES
+
+Crea componentes modulares:
+- `<MetricCard>` - Card de métrica con título, valor, cambio % y icono
+- `<DataTable>` - Tabla genérica con ordenamiento, filtros, paginación
+- `<StatChart>` - Wrapper para gráficos de Recharts
+- `<UserAvatar>` - Avatar de usuario con fallback a iniciales
+- `<StatusBadge>` - Badge de estado (activo/inactivo/etc.) con colores
+- `<EmptyState>` - Componente cuando no hay datos
+- `<LoadingSpinner>` - Spinner de carga
+- `<ConfirmDialog>` - Diálogo de confirmación para acciones destructivas
+
+### 6. FEATURES ADICIONALES
+
+**Búsqueda Global (Cmd+K):**
+- Shortcut de teclado
+- Búsqueda en usuarios, suscripciones, tickets
+- Navegación rápida a páginas
+
+**Notificaciones:**
+- Bell icon con badge
+- Dropdown con últimas 10 notificaciones
+- Link a página de notificaciones completas
+
+**Modo de Prueba:**
+- Toggle para activar "Demo Mode" que use datos ficticios
+- Útil para mostrar el dashboard sin exponer datos reales
+
+**Exportación de Datos:**
+- Botones de exportar en tablas principales
+- Formatos: CSV, Excel, JSON
+
+**Dark/Light Mode Toggle** (opcional, pero dark por defecto)
+
+### 7. SEGURIDAD Y BUENAS PRÁCTICAS
+
+- Validación de inputs con Zod
+- Sanitización de datos mostrados (prevenir XSS)
+- Confirmación antes de acciones destructivas (suspender usuario, cancelar suscripción)
+- Logs de acciones de admin (quién hizo qué y cuándo)
+- Rate limiting simulado para formularios
+
+## ENTREGABLES
+
+1. **Un único archivo React con Next.js** que contenga:
+   - Layout completo con sidebar y header
+   - Todas las páginas mencionadas
+   - Componentes reutilizables
+   - Lógica de naveg
