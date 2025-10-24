@@ -61,15 +61,18 @@ Para que el dashboard funcione al 100%, necesitas completar 2 pasos de configura
 
 #### 1. Configurar Dominios en Clerk
 
-El dashboard usa Clerk en producción. Debes agregar el dominio de Replit:
+El dashboard usa Clerk en producción. Debes agregar tu dominio de Netlify:
 
 1. Ve a https://dashboard.clerk.com
 2. Selecciona tu aplicación
 3. Ve a **Settings → Domains** (o **Allowed origins**)
-4. Agrega estos dominios:
+4. Agrega tu dominio de Netlify:
    ```
-   https://*.replit.dev
-   https://*.repl.co
+   https://tu-sitio.netlify.app
+   ```
+   Y si usas dominio personalizado:
+   ```
+   https://tudominio.com
    ```
 5. Guarda los cambios y espera 1-2 minutos
 
@@ -186,11 +189,41 @@ Configuradas en Replit Secrets:
 - `NEXT_PUBLIC_CONVEX_URL` - Convex deployment URL
 - `CONVEX_DEPLOYMENT` - Convex deployment ID
 
+## Despliegue en Netlify - CONFIGURADO ✅
+
+### Archivos Configurados para Netlify
+
+1. ✅ **netlify.toml** - Configuración de build y deploy
+2. ✅ **@netlify/plugin-nextjs** - Plugin instalado
+3. ✅ **next.config.ts** - Optimizado para producción
+4. ✅ **DEPLOY_NETLIFY.md** - Guía completa de despliegue paso a paso
+
+### Guía de Despliegue
+
+Ver **`DEPLOY_NETLIFY.md`** para instrucciones completas de despliegue en Netlify.
+
+**Resumen rápido:**
+
+1. **En Netlify Dashboard:**
+   - Build command: `npm run build`
+   - Publish directory: `.next`
+   - Variables de entorno: 4 (Clerk + Convex)
+
+2. **Ejecutar antes de deploy:**
+   ```bash
+   npx convex dev
+   ```
+
+3. **Configurar Clerk:**
+   - Agregar dominio de Netlify en Clerk Dashboard
+
 ## Próximos Pasos Recomendados
 
 ### Configuración Inmediata (Crítica)
-1. ✅ Agregar dominios de Replit a Clerk dashboard
-2. ✅ Ejecutar `npx convex dev` para generar tipos y sincronizar
+1. ⏳ Ejecutar `npx convex dev` para generar tipos y sincronizar
+2. ⏳ Configurar variables de entorno en Netlify
+3. ⏳ Agregar dominio de Netlify a Clerk dashboard
+4. ⏳ Desplegar en Netlify
 
 ### Desarrollo Futuro
 3. ⏳ Implementar página de Tokens & Uso

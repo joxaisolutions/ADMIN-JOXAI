@@ -4,7 +4,7 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: false,
   },
-  // Allow Clerk to work with Replit domains
+  // Allow Clerk to work with deployment domains
   async headers() {
     return [
       {
