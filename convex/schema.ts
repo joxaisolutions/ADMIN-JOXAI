@@ -15,8 +15,8 @@ export default defineSchema({
       v.literal("enterprise")
     ),
     products: v.array(v.string()),
-    tokensUsed: v.object({}),
-    tokensLimit: v.object({}),
+    tokensUsed: v.any(), // Dynamic object for different products
+    tokensLimit: v.any(), // Dynamic object for different products
     status: v.union(
       v.literal("active"),
       v.literal("inactive"),
@@ -32,7 +32,7 @@ export default defineSchema({
     .index("by_status", ["status"]),
 
   subscriptions: defineTable({
-    userId: v.id("users"),
+    userId: v.string(), // Reference to user clerkId
     productId: v.string(),
     plan: v.string(),
     price: v.number(),
@@ -50,7 +50,7 @@ export default defineSchema({
     .index("by_product", ["productId"]),
 
   transactions: defineTable({
-    userId: v.id("users"),
+    userId: v.string(), // Reference to user clerkId
     productId: v.string(),
     amount: v.number(),
     currency: v.string(),
@@ -71,7 +71,7 @@ export default defineSchema({
     .index("by_product", ["productId"]),
 
   tickets: defineTable({
-    userId: v.id("users"),
+    userId: v.string(), // Reference to user clerkId
     subject: v.string(),
     productId: v.string(),
     priority: v.union(
@@ -100,7 +100,7 @@ export default defineSchema({
     .index("by_priority", ["priority"]),
 
   bundles: defineTable({
-    userId: v.id("users"),
+    userId: v.string(), // Reference to user clerkId
     products: v.array(v.string()),
     price: v.number(),
     discount: v.number(),
@@ -115,6 +115,6 @@ export default defineSchema({
     users: v.number(),
     activeUsers: v.number(),
     tokensProcessed: v.number(),
-    productBreakdown: v.object({}),
+    productBreakdown: v.any(), // Dynamic object for different products
   }).index("by_date", ["date"]),
 });

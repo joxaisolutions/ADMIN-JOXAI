@@ -32,8 +32,8 @@ export const create = mutation({
       v.literal("enterprise")
     ),
     products: v.array(v.string()),
-    tokensUsed: v.object({}),
-    tokensLimit: v.object({}),
+    tokensUsed: v.any(),
+    tokensLimit: v.any(),
     status: v.union(
       v.literal("active"),
       v.literal("inactive"),
@@ -53,45 +53,28 @@ export const create = mutation({
 export const update = mutation({
   args: {
     id: v.id("users"),
-    data: v.object({
-      name: v.optional(v.string()),
-      plan: v.optional(
-        v.union(
-          v.literal("free"),
-          v.literal("creator"),
-          v.literal("pro"),
-          v.literal("business"),
-          v.literal("enterprise")
-        )
-      ),
-      status: v.optional(
-        v.union(
-          v.literal("active"),
-          v.literal("inactive"),
-          v.literal("suspended")
-        )
-      ),
-      tokensUsed: v.optional(v.object({})),
-      tokensLimit: v.optional(v.object({})),
-    }),
+    name: v.optional(v.string()),
+    plan: v.optional(
+      v.union(
+        v.literal("free"),
+        v.literal("creator"),
+        v.literal("pro"),
+        v.literal("business"),
+        v.literal("enterprise")
+      )
+    ),
+    status: v.optional(
+      v.union(
+        v.literal("active"),
+        v.literal("inactive"),
+        v.literal("suspended")
+      )
+    ),
+    tokensUsed: v.optional(v.any()),
+    tokensLimit: v.optional(v.any()),
   },
   handler: async (ctx, args) => {
-    await ctx.db.patch(args.id, args.data);
-  },
-});
-
-export const updateLastLogin = mutation({
-  args: { clerkId: v.string() },
-  handler: async (ctx, args) => {
-    const user = await ctx.db
-      .query("users")
-      .withIndex("by_clerk_id", (q) => q.eq("clerkId", args.clerkId))
-      .first();
-    
-    if (user) {
-      await ctx.db.patch(user._id, {
-        lastLogin: new Date().toISOString(),
-      });
-    }
+    const { id, ...data } = args;
+    await ctx.db.patch(id, data);
   },
 });
