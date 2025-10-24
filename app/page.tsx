@@ -12,6 +12,10 @@ import {
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import UsersTable from '@/components/users-table';
+import SubscriptionsPage from '@/components/subscriptions-page';
+import FinancesPage from '@/components/finances-page';
+import SupportPage from '@/components/support-page';
 
 export default function DashboardPage() {
   const { user } = useUser();
@@ -295,7 +299,12 @@ export default function DashboardPage() {
                 </div>
               )}
 
-              {currentPage !== 'overview' && (
+              {currentPage === 'users' && <UsersTable />}
+              {currentPage === 'subscriptions' && <SubscriptionsPage />}
+              {currentPage === 'finances' && <FinancesPage />}
+              {currentPage === 'support' && <SupportPage />}
+              
+              {!['overview', 'users', 'subscriptions', 'finances', 'support'].includes(currentPage) && (
                 <div className="flex items-center justify-center h-full">
                   <Card className="max-w-md">
                     <CardHeader>
@@ -303,34 +312,24 @@ export default function DashboardPage() {
                         {navigationItems.find((item) => item.id === currentPage)?.label}
                       </CardTitle>
                       <CardDescription>
-                        Dashboard listo para producción con Convex y Clerk
+                        Página en construcción
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
+                      <p className="text-sm text-muted-foreground">
+                        Esta sección estará disponible próximamente.
+                      </p>
                       <div className="p-4 bg-warning/10 border border-warning rounded-lg">
                         <p className="text-sm font-medium text-warning mb-2">
                           ⚠️ Configuración Pendiente
                         </p>
                         <p className="text-sm text-muted-foreground">
-                          Para activar la conexión con Convex, ejecuta en tu terminal:
+                          Para activar completamente Convex, ejecuta:
                         </p>
                         <code className="block mt-2 p-2 bg-background rounded text-xs">
                           npx convex dev
                         </code>
-                        <p className="text-xs text-muted-foreground mt-2">
-                          Esto generará los tipos y desplegará el schema a producción.
-                        </p>
                       </div>
-                      <p className="text-sm text-muted-foreground">
-                        El dashboard está configurado con:
-                      </p>
-                      <ul className="text-sm text-muted-foreground space-y-1">
-                        <li>✅ Clerk para autenticación</li>
-                        <li>✅ Convex para base de datos</li>
-                        <li>✅ Schema completo definido</li>
-                        <li>✅ Queries y mutations listas</li>
-                        <li>⏳ Esperando codegen de Convex</li>
-                      </ul>
                     </CardContent>
                   </Card>
                 </div>

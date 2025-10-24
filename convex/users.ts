@@ -20,31 +20,30 @@ export const getByClerkId = query({
 
 export const create = mutation({
   args: {
-    clerkId: v.string(),
     email: v.string(),
     name: v.string(),
-    avatar: v.optional(v.string()),
-    plan: v.union(
+    productId: v.string(),
+    subscriptionPlan: v.union(
       v.literal("free"),
-      v.literal("creator"),
+      v.literal("basic"),
       v.literal("pro"),
-      v.literal("business"),
+      v.literal("premium"),
       v.literal("enterprise")
     ),
-    products: v.array(v.string()),
-    tokensUsed: v.any(),
-    tokensLimit: v.any(),
-    status: v.union(
-      v.literal("active"),
-      v.literal("inactive"),
-      v.literal("suspended")
-    ),
     country: v.string(),
-    stripeCustomerId: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     return await ctx.db.insert("users", {
-      ...args,
+      clerkId: `user_${Date.now()}`, // Temporary until Clerk creates the user
+      email: args.email,
+      name: args.name,
+      productId: args.productId,
+      subscriptionPlan: args.subscriptionPlan,
+      products: [args.productId],
+      tokensUsed: {},
+      tokensLimit: {},
+      status: "active",
+      country: args.country,
       lastLogin: new Date().toISOString(),
     });
   },
@@ -54,12 +53,14 @@ export const update = mutation({
   args: {
     id: v.id("users"),
     name: v.optional(v.string()),
-    plan: v.optional(
+    email: v.optional(v.string()),
+    productId: v.optional(v.string()),
+    subscriptionPlan: v.optional(
       v.union(
         v.literal("free"),
-        v.literal("creator"),
+        v.literal("basic"),
         v.literal("pro"),
-        v.literal("business"),
+        v.literal("premium"),
         v.literal("enterprise")
       )
     ),
@@ -70,11 +71,19 @@ export const update = mutation({
         v.literal("suspended")
       )
     ),
-    tokensUsed: v.optional(v.any()),
-    tokensLimit: v.optional(v.any()),
+    country: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const { id, ...data } = args;
     await ctx.db.patch(id, data);
+  },
+});
+
+export const deleteUser = mutation({
+  args: {
+    userId: v.id("users"),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.delete(args.userId);
   },
 });

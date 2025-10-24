@@ -7,14 +7,15 @@ export default defineSchema({
     email: v.string(),
     name: v.string(),
     avatar: v.optional(v.string()),
-    plan: v.union(
+    subscriptionPlan: v.union(
       v.literal("free"),
-      v.literal("creator"),
+      v.literal("basic"),
       v.literal("pro"),
-      v.literal("business"),
+      v.literal("premium"),
       v.literal("enterprise")
     ),
-    products: v.array(v.string()),
+    productId: v.string(), // Primary product
+    products: v.array(v.string()), // All subscribed products
     tokensUsed: v.any(), // Dynamic object for different products
     tokensLimit: v.any(), // Dynamic object for different products
     status: v.union(
@@ -28,13 +29,19 @@ export default defineSchema({
   })
     .index("by_clerk_id", ["clerkId"])
     .index("by_email", ["email"])
-    .index("by_plan", ["plan"])
-    .index("by_status", ["status"]),
+    .index("by_plan", ["subscriptionPlan"])
+    .index("by_status", ["status"])
+    .index("by_product", ["productId"]),
 
   subscriptions: defineTable({
     userId: v.string(), // Reference to user clerkId
     productId: v.string(),
-    plan: v.string(),
+    plan: v.union(
+      v.literal("free"),
+      v.literal("basic"),
+      v.literal("pro"),
+      v.literal("premium")
+    ),
     price: v.number(),
     status: v.union(
       v.literal("active"),
@@ -42,6 +49,8 @@ export default defineSchema({
       v.literal("expired"),
       v.literal("trial")
     ),
+    startDate: v.number(), // timestamp
+    nextBillingDate: v.optional(v.number()), // timestamp
     currentPeriodEnd: v.string(),
     cancelAtPeriodEnd: v.boolean(),
   })
@@ -52,6 +61,12 @@ export default defineSchema({
   transactions: defineTable({
     userId: v.string(), // Reference to user clerkId
     productId: v.string(),
+    type: v.union(
+      v.literal("subscription"),
+      v.literal("token_purchase"),
+      v.literal("refund"),
+      v.literal("bundle")
+    ),
     amount: v.number(),
     currency: v.string(),
     method: v.union(
@@ -60,7 +75,7 @@ export default defineSchema({
       v.literal("transfer")
     ),
     status: v.union(
-      v.literal("success"),
+      v.literal("completed"),
       v.literal("failed"),
       v.literal("pending")
     ),
@@ -68,11 +83,13 @@ export default defineSchema({
   })
     .index("by_user", ["userId"])
     .index("by_status", ["status"])
-    .index("by_product", ["productId"]),
+    .index("by_product", ["productId"])
+    .index("by_type", ["type"]),
 
   tickets: defineTable({
     userId: v.string(), // Reference to user clerkId
     subject: v.string(),
+    message: v.string(), // Initial message/description
     productId: v.string(),
     priority: v.union(
       v.literal("high"),
@@ -85,13 +102,13 @@ export default defineSchema({
       v.literal("resolved"),
       v.literal("closed")
     ),
-    messages: v.array(
+    messages: v.optional(v.array(
       v.object({
         from: v.union(v.literal("user"), v.literal("admin")),
         content: v.string(),
         timestamp: v.string(),
       })
-    ),
+    )),
     assignedTo: v.optional(v.string()),
     updatedAt: v.string(),
   })

@@ -50,7 +50,7 @@ export const addMessage = mutation({
     if (!ticket) throw new Error("Ticket not found");
     
     await ctx.db.patch(args.id, {
-      messages: [...ticket.messages, args.message],
+      messages: [...(ticket.messages || []), args.message],
       updatedAt: new Date().toISOString(),
     });
   },
